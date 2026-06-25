@@ -1,29 +1,32 @@
 import { useState } from "react";
+import { createComplaint } from "../services/complaintService";
 
 function SubmitComplaint() {
-  const [formData, setFormData] = useState({
-    complaint: "",
-    location: "",
-  });
+  const [complaint, setComplaint] = useState("");
+  const [location, setLocation] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    try {
+      await createComplaint({
+        complaint,
+        location,
+      });
 
-    alert("Complaint Submitted Successfully!");
+      setMessage("Complaint submitted successfully!");
+
+      setComplaint("");
+      setLocation("");
+    } catch (error) {
+      console.error(error);
+      setMessage("Failed to submit complaint");
+    }
   };
 
   return (
     <div className="min-h-screen bg-slate-900 text-white p-10">
-
       <h1 className="text-4xl font-bold mb-8">
         Submit Complaint
       </h1>
@@ -32,44 +35,34 @@ function SubmitComplaint() {
         onSubmit={handleSubmit}
         className="bg-slate-800 p-8 rounded-3xl max-w-3xl"
       >
+        <input
+          type="text"
+          placeholder="Complaint"
+          value={complaint}
+          onChange={(e) => setComplaint(e.target.value)}
+          className="w-full p-4 rounded-xl bg-slate-700 mb-4"
+        />
 
-        <div className="mb-6">
-          <label className="block mb-2">
-            Complaint
-          </label>
-
-          <textarea
-            name="complaint"
-            rows="5"
-            value={formData.complaint}
-            onChange={handleChange}
-            className="w-full p-4 rounded-xl bg-slate-700"
-            placeholder="Describe the issue..."
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="block mb-2">
-            Location
-          </label>
-
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            className="w-full p-4 rounded-xl bg-slate-700"
-            placeholder="Enter location"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="w-full p-4 rounded-xl bg-slate-700 mb-4"
+        />
 
         <button
           type="submit"
-          className="bg-blue-600 px-6 py-3 rounded-xl hover:bg-blue-700"
+          className="bg-blue-600 px-6 py-3 rounded-xl"
         >
           Submit Complaint
         </button>
 
+        {message && (
+          <p className="mt-4 text-green-400">
+            {message}
+          </p>
+        )}
       </form>
     </div>
   );
