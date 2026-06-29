@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 // import { getComplaints } from "../services/complaintService";
+import { getComplaints } from "../services/complaintService";
 
 function Complaints() {
   const [complaints, setComplaints] = useState([
@@ -27,27 +28,24 @@ function Complaints() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
-  useEffect(() => {
-    // Future API integration
+    useEffect(() => {
+  const fetchComplaints = async () => {
+    try {
+      setLoading(true);
 
-    /*
-    const fetchComplaints = async () => {
-      try {
-        setLoading(true);
+      const data = await getComplaints();
 
-        const data = await getComplaints();
+      setComplaints(data);
+    } catch (error) {
+      console.error("Failed to fetch complaints:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        setComplaints(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchComplaints();
-    */
-  }, []);
+  fetchComplaints();
+}, []);
+ 
 
   const filteredComplaints = complaints.filter((item) => {
     const matchesSearch =

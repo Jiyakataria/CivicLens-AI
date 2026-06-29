@@ -1,73 +1,121 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Sidebar() {
+  const location = useLocation();
+
+  const navItem =
+    "p-4 rounded-2xl font-medium transition-all duration-300";
+
+  const active =
+    "bg-blue-600 shadow-lg";
+
+  const inactive =
+    "bg-slate-800 hover:bg-slate-700";
+
   return (
-    <div className="w-72 min-h-screen bg-slate-950 text-white p-6 border-r border-slate-800 flex flex-col">
+    <div className="w-72 min-h-screen bg-slate-950 border-r border-slate-800 p-6 flex flex-col">
 
-      <h1 className="text-3xl font-bold mb-10 text-blue-400">
-        CivicLens AI
-      </h1>
+      {/* Logo */}
+      <div className="mb-10">
 
+        <h1 className="text-3xl font-bold text-white">
+          🏙 CivicLens AI
+        </h1>
+
+        <p className="text-gray-400 text-sm mt-2">
+          Smart Civic Intelligence Platform
+        </p>
+
+      </div>
+
+      {/* Navigation */}
       <nav className="flex flex-col gap-4">
 
         <Link
           to="/"
-          className="bg-slate-800 hover:bg-blue-600 transition-all duration-300 p-4 rounded-2xl font-medium"
+          className={`${navItem} ${
+            location.pathname === "/" ? active : inactive
+          }`}
         >
           🏠 Home
         </Link>
 
         <Link
           to="/dashboard"
-          className="bg-slate-800 hover:bg-blue-600 transition-all duration-300 p-4 rounded-2xl font-medium"
+          className={`${navItem} ${
+            location.pathname === "/dashboard"
+              ? active
+              : inactive
+          }`}
         >
           📊 Dashboard
         </Link>
 
         <Link
           to="/analysis"
-          className="bg-slate-800 hover:bg-blue-600 transition-all duration-300 p-4 rounded-2xl font-medium"
+          className={`${navItem} ${
+            location.pathname === "/analysis"
+              ? active
+              : inactive
+          }`}
         >
           🤖 AI Analysis
         </Link>
 
         <Link
-          to="/complaints"
-          className="bg-slate-800 hover:bg-blue-600 transition-all duration-300 p-4 rounded-2xl font-medium"
+          to="/submit"
+          className={`${navItem} ${
+            location.pathname === "/submit"
+              ? active
+              : inactive
+          }`}
         >
-          📝 Complaints
+          ➕ Submit Complaint
+        </Link>
+
+        <Link
+          to="/complaints"
+          className={`${navItem} ${
+            location.pathname === "/complaints"
+              ? active
+              : inactive
+          }`}
+        >
+          📋 Complaints
         </Link>
 
         <Link
           to="/heatmap"
-          className="bg-slate-800 hover:bg-blue-600 transition-all duration-300 p-4 rounded-2xl font-medium"
+          className={`${navItem} ${
+            location.pathname === "/heatmap"
+              ? active
+              : inactive
+          }`}
         >
-          🗺️ Heat Map
-        </Link>
-
-        <Link
-          to="/settings"
-          className="bg-slate-800 hover:bg-blue-600 transition-all duration-300 p-4 rounded-2xl font-medium"
-        >
-          ⚙️ Settings
+          🗺 Heat Map
         </Link>
 
       </nav>
 
-      <div className="mt-auto pt-10">
-        <div className="bg-slate-800 p-5 rounded-2xl border border-slate-700">
-          <p className="text-sm text-gray-400">
-            Civic Intelligence Platform
+      {/* Footer */}
+      <div className="mt-auto">
+
+        <div className="bg-slate-800 rounded-2xl p-5">
+
+          <p className="text-gray-400 text-sm">
+            Version
           </p>
 
-          <p className="mt-2 font-semibold text-blue-400">
-            Smart Complaint Analytics
+          <p className="font-semibold mt-1">
+            CivicLens AI v1.0
           </p>
 
-          <p className="text-xs text-gray-500 mt-2">
-            AI • Analytics • Clustering • Mapping
-          </p>
+          <div className="mt-4 text-sm text-green-400">
+            ● System Online
+          </div>
+
         </div>
+
       </div>
 
     </div>
