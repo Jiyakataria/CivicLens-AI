@@ -39,3 +39,82 @@ async def recent_complaints():
         complaints.append(complaint)
 
     return complaints
+
+
+@router.get("/dashboard/categories")
+async def complaints_by_category():
+
+    pipeline = [
+        {
+            "$match": {
+                "category": {
+                    "$ne": None
+                }
+            }
+        },
+        {
+            "$group": {
+                "_id": "$category",
+                "count": {
+                    "$sum": 1
+                }
+            }
+        }
+    ]
+
+    result = []
+
+    async for item in complaints_collection.aggregate(pipeline):
+
+        result.append({
+            "category": item["_id"],
+            "count": item["count"]
+        })
+
+    return result
+
+
+@router.get("/dashboard/priorities")
+async def complaints_by_priority():
+
+    pipeline = [
+        {
+            "$match": {
+                "priority": {
+                    "$ne": None
+                }
+            }
+        },
+        {
+            "$group": {
+                "_id": "$priority",
+                "count": {
+                    "$sum": 1
+                }
+            }
+        }
+    ]
+
+    result = []
+
+    async for item in complaints_collection.aggregate(pipeline):
+
+        result.append({
+            "priority": item["_id"],
+            "count": item["count"]
+        })
+
+    return result
+
+
+@router.get("/dashboard/trends")
+async def complaint_trends():
+
+    total = await complaints_collection.count_documents({})
+
+    return [
+        {
+            "month": "Jun",
+            "complaints": total
+        }
+    ]

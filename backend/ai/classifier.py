@@ -1,3 +1,4 @@
+
 from pathlib import Path
 import joblib
 
@@ -24,3 +25,4 @@ def classify(text: str) -> str:
     prediction = model.predict(vector)
 
     return prediction[0]
+
