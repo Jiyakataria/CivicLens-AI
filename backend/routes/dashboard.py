@@ -13,12 +13,13 @@ async def dashboard_stats():
         {"status": "RESOLVED"}
     )
 
+    clusters = await complaints_collection.distinct("cluster")
+
     return {
         "total_complaints": total,
         "resolved_issues": resolved,
-        "ai_clusters": 0
+        "ai_clusters": len(clusters)
     }
-
 
 @router.get("/complaints/recent")
 async def recent_complaints():
@@ -118,3 +119,39 @@ async def complaint_trends():
             "complaints": total
         }
     ]
+@router.get("/dashboard/heatmap")
+async def heatmap_data():
+
+    pipeline = [
+        {
+            "$match": {
+                "location": {
+                    "$ne": None
+                }
+            }
+        },
+        {
+            "$group": {
+                "_id": "$location",
+                "count": {
+                    "$sum": 1
+                }
+            }
+        },
+        {
+            "$sort": {
+                "count": -1
+            }
+        }
+    ]
+
+    result = []
+
+    async for item in complaints_collection.aggregate(pipeline):
+
+        result.append({
+            "location": item["_id"],
+            "count": item["count"]
+        })
+
+    return result    
