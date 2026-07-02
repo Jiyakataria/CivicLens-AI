@@ -1,4 +1,7 @@
 def summarize(category, location, urgency, priority):
+    """
+    Generate a readable AI summary.
+    """
 
     return (
         f"A {category.lower()} complaint has been reported "
