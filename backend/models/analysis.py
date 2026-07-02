@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel
 
 
@@ -6,8 +8,11 @@ class AnalysisRequest(BaseModel):
 
 
 class AnalysisResponse(BaseModel):
+    complaint: str
     category: str
-    priority: str
-    sentiment: str
+    location: str
+    urgency: Any
+    sentiment: Any
+    priority: Any
     summary: str
-    cluster: str
+    cluster_id: int | None

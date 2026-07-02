@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from fastapi import APIRouter
 from models.complaint import Complaint
 from database.connection import complaints_collection
 from services.ai_service import analyze_complaint
-from datetime import datetime , timezone
+from services.clustering_service import update_clusters
+from datetime import datetime, timezone
 import logging
 
-
 logger = logging.getLogger(__name__)
+
 router = APIRouter()
 
 
@@ -19,14 +19,15 @@ async def create_complaint(data: Complaint):
 
         analysis = analyze_complaint(complaint["complaint"])
 
-        
-
         complaint.update(analysis)
 
         complaint["status"] = "OPEN"
         complaint["created_at"] = datetime.now(timezone.utc)
 
         result = await complaints_collection.insert_one(complaint)
+
+        # Recompute clusters after adding the new complaint
+        await update_clusters()
 
         return {
             "message": "Complaint saved",

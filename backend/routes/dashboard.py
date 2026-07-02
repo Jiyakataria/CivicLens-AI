@@ -13,13 +13,21 @@ async def dashboard_stats():
         {"status": "RESOLVED"}
     )
 
-    clusters = await complaints_collection.distinct("cluster")
+    clusters = await complaints_collection.distinct("cluster_id")
+
+    # Ignore complaints that haven't been clustered yet
+    clusters = [
+        cluster
+        for cluster in clusters
+        if cluster is not None
+    ]
 
     return {
         "total_complaints": total,
         "resolved_issues": resolved,
         "ai_clusters": len(clusters)
     }
+
 
 @router.get("/complaints/recent")
 async def recent_complaints():
@@ -119,6 +127,8 @@ async def complaint_trends():
             "complaints": total
         }
     ]
+
+
 @router.get("/dashboard/heatmap")
 async def heatmap_data():
 
@@ -154,4 +164,4 @@ async def heatmap_data():
             "count": item["count"]
         })
 
-    return result    
+    return result
