@@ -1,40 +1,17 @@
-from sentence_transformers import util
+from sklearn.cluster import DBSCAN
 import numpy as np
 
-SIMILARITY_THRESHOLD = 0.80
 
+def cluster_embeddings(embeddings):
 
-def find_duplicate(embedding, stored_embeddings):
-    """
-    Compare a complaint embedding with existing complaint embeddings.
-    """
+    embeddings = np.array(embeddings)
 
-    if len(stored_embeddings) == 0:
-        return {
-            "cluster_id": None,
-            "duplicate": False,
-            "similarity": 0
-        }
+    model = DBSCAN(
+        eps=0.35,
+        min_samples=2,
+        metric="cosine"
+    )
 
-    similarities = util.cos_sim(
-        embedding,
-        stored_embeddings
-    )[0]
+    labels = model.fit_predict(embeddings)
 
-    max_similarity = similarities.max().item()
-
-    if max_similarity >= SIMILARITY_THRESHOLD:
-
-        cluster = int(np.argmax(similarities))
-
-        return {
-            "cluster_id": cluster,
-            "duplicate": True,
-            "similarity": round(max_similarity, 3)
-        }
-
-    return {
-        "cluster_id": None,
-        "duplicate": False,
-        "similarity": round(max_similarity, 3)
-    }
+    return labels.tolist()
