@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from routes.complaints import router as complaints_router
 from routes.dashboard import router as dashboard_router
+from routes.analyze import router as analyze_router
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.add_middleware(
 
 app.include_router(complaints_router, prefix="/api")
 app.include_router(dashboard_router, prefix="/api")
+app.include_router(analyze_router, prefix="/api")
 
 @app.get("/")
 def home():
