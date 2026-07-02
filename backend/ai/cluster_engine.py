@@ -2,15 +2,12 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 
 
-def cluster_complaints(embeddings):
-    """
-    Cluster similar complaints.
-    """
+def cluster_embeddings(embeddings):
 
     embeddings = np.array(embeddings)
 
     model = DBSCAN(
-        eps=0.5,
+        eps=0.35,
         min_samples=2,
         metric="cosine"
     )

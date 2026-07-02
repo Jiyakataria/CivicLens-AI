@@ -1,17 +1,17 @@
 from ai.embedding_generator import generate_embedding
-from ai.cluster_engine import cluster_complaints
+from ai.cluster_engine import cluster_embeddings
 
 complaints = [
-    "Garbage near Kothrud bus stop",
-    "Overflowing garbage at Kothrud bus stand",
-    "Waste dumped near Kothrud stop",
-    "Water leakage near FC Road",
-    "Pipeline burst at FC Road"
+    "Garbage overflowing near Kothrud",
+    "Overflowing garbage at Kothrud",
+    "Huge pothole on FC Road",
+    "Road damaged near FC Road",
+    "Streetlight not working in Baner"
 ]
 
 embeddings = [generate_embedding(c) for c in complaints]
 
-clusters = cluster_complaints(embeddings)
+labels = cluster_embeddings(embeddings)
 
-for complaint, cluster in zip(complaints, clusters):
-    print(cluster, "->", complaint)
+for complaint, label in zip(complaints, labels):
+    print(label, complaint)

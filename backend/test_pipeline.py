@@ -4,4 +4,6 @@ complaint = "Garbage overflowing near Kothrud Market"
 
 result = analyze_complaint(complaint)
 
-print(result)
+from pprint import pprint
+
+pprint(result)
