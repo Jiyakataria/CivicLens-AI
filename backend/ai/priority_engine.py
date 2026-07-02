@@ -1,11 +1,22 @@
 def calculate_priority(
-    urgency_score: int,
-    duplicate_count: int,
-    days_pending: int
+    urgency,
+    duplicate_count=1,
+    days_pending=0
 ):
     """
-    Calculates complaint priority.
+    Calculate complaint priority.
     """
+
+    # If urgency is returned as a dictionary
+    if isinstance(urgency, dict):
+        urgency_score = urgency.get("score", 20)
+
+    # If urgency is already an integer
+    elif isinstance(urgency, int):
+        urgency_score = urgency
+
+    else:
+        urgency_score = 20
 
     score = (
         urgency_score +
@@ -26,6 +37,6 @@ def calculate_priority(
         level = "Low"
 
     return {
-        "priority_score": score,
-        "priority": level
+        "level": level,
+        "score": score
     }
